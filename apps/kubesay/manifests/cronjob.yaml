@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  creationTimestamp: null
+  name: kubesay
+spec:
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+      name: kubesay
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+          - image: docker/whalesay
+            name: kubesay
+            resources: {}
+            command: ["cowsay"]
+            args: ["ArgoCD rocks!"]
+          restartPolicy: OnFailure
+  schedule: '*/5 * * * *'
+status: {}
