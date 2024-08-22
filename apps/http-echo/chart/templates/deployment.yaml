@@ -1,0 +1,23 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: http-echo-back
+  name: http-echo-back
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: http-echo-back
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: http-echo-back
+    spec:
+      containers:
+        - image: traefik/whoami
+          name: whoami
+          resources: {}
+status: {}

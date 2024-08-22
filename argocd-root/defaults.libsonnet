@@ -12,4 +12,10 @@
     #destinationName: "in-cluster",
     destinationServer: "https://kubernetes.default.svc",
   },
+  _clusterInfo: {
+    # Jsonnet is lazily evaluated. Errors will only be thrown if something downstream tries to use the value and it was not overwritten yet
+    baseDomain: error("Need to set _clusterInfo.baseDomain"),
+    ingressAnnotations: {},
+    ingressClass: error("Need to set _clusterInfo.ingressClass")
+  }
 }

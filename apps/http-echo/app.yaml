@@ -1,0 +1,31 @@
+# Static app for easy debugging, values can be overriden by parent app as needed
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: http-echo
+    # Default namespace, will likely be overriden by parent app
+    namespace: argocd
+    finalizers:
+    # Cascade deletion of this app, i.e. when this app is deleted, delete all resources it deployed first
+    # This is generally desired for the app of app pattern to avoid orphaning resources
+      - resources-finalizer.argocd.argoproj.io/foreground
+spec:
+  # Default project, will likely be overriden by parent app
+  project: default
+
+  destination:
+    namespace: argocd
+    name: in-cluster
+
+  source:
+    repoURL: https://github.com/BronzeDeer/argocd-demo-team-a.git
+    targetRevision: HEAD
+    path: ./apps/http-echo/chart
+
+    # This is a helm chart, but we don't need to set any values by default
+    helm: {}
+
+  syncPolicy:
+    automated: # automated sync by default retries failed attempts 5 times with following delays between attempts ( 5s, 10s, 20s, 40s, 80s ); retry controlled using `retry` field.
+      prune: true # Specifies if resources should be pruned during auto-syncing ( false by default ).
+      selfHeal: true # Specifies if partial app sync should be executed when resources are changed only in target Kubernetes cluster and no git change detected ( false by default ).

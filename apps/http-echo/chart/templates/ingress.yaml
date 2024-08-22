@@ -1,0 +1,27 @@
+---
+{{ $host := print (trimSuffix "." .Values.ingress.subDomain) "." ( trimPrefix "." .Values.ingress.baseDomain) -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+  name: debug-oauth
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    - host: {{ $host }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: http-echo-back
+                port:
+                  number: 80
+            path: /
+            pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - {{ $host }}
+      secretName: http-echo-tls-secret
+
+

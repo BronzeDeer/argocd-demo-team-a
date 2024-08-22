@@ -1,0 +1,8 @@
+
+ingress:
+  subDomain: echo
+  # Required, final domain will be subDomain.baseDomain
+  # baseDomain:
+  # Common ingress annotations to set for things like cluster issuer or sso
+  annotations: {}
+  #className: "nginx"

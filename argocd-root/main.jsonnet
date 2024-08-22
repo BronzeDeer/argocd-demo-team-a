@@ -10,7 +10,9 @@ local relativePathToMyRoot = '..';
 
 
 // ArgoCD ultimately expects a list of resources
-function(_argoCD=defaults._argoCD) [
+function(_argoCD=defaults._argoCD,_clusterInfo=defaults._clusterInfo) [
+  #
+  # This is not actually an app-of-apps, but use full patching anyway as an example
   utils.makeAppPatchable(
     app=(std.parseYaml(importstr '../apps/kubesay/app.yaml')),
     _argoCD=_argoCD,
@@ -19,4 +21,30 @@ function(_argoCD=defaults._argoCD) [
     sourceType = "jsonnet"
   )
   + utils.withPatchedLocalApp(),
+
+  # http-echo
+  utils.makeAppPatchable(
+    app=( std.parseYaml(importstr '../apps/http-echo/app.yaml')),
+    _argoCD=_argoCD,
+    relativePathToAppRepoRoot=relativePathToMyRoot,
+    sourceType="helm"
+  )
+  + utils.withPatchedLocalApp()
+  + {
+    // Fixme: Make Helper Method for this or use https://github.com/jsonnet-libs/argo-cd-libsonnet
+    spec+: {
+      source+: {
+        helm+: {
+          //Pass and transform relevant configuration from cluster
+          valuesObject+: {
+            ingress+: {
+              baseDomain: _clusterInfo.baseDomain,
+              annotations+: _clusterInfo.ingressAnnotations,
+              className: _clusterInfo.ingressClass
+            }
+          }
+        }
+      }
+    }
+  },
 ]

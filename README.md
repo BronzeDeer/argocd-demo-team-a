@@ -13,3 +13,7 @@ The entry point implements the app of app pattern in jsonnet, it loads the base 
 ### Kube Say
 
 A simple cronjob of the docker/whalesay image, it serves as an example of deploying via plain yamls manifests in cases where no changes (beyond setting the namespace on resources with no set namespace) need to be made to the manifests
+
+### HTTP Echo
+
+A simple deployment of `traefik/whoami` which echos back all headers of any http request that reaches it. It demonstrates how the root-app can should use the _clusterInfo input to configure sub-apps

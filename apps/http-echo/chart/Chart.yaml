@@ -1,0 +1,6 @@
+apiVersion: v2
+name: http-echo
+version: v0.0.1
+description: |
+  A simple http-echo service, based on traefik/whoami.
+  It has a few meaninful inputs under  `ingress`, demonstrating very simply how configured/templated manifests can receive inputs from parent appss
