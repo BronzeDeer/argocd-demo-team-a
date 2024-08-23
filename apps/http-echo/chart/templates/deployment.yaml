@@ -6,7 +6,7 @@ metadata:
     app: http-echo-back
   name: http-echo-back
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: http-echo-back
