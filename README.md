@@ -17,3 +17,7 @@ A simple cronjob of the docker/whalesay image, it serves as an example of deploy
 ### HTTP Echo
 
 A simple deployment of `traefik/whoami` which echos back all headers of any http request that reaches it. It demonstrates how the root-app can should use the _clusterInfo input to configure sub-apps
+
+### Rollout Example
+
+A deployment of the ["blue-green" argocd example app](https://github.com/argoproj/argocd-example-apps/tree/master/blue-green) which demonstrates a blue green deployment via Argo Rollouts.
