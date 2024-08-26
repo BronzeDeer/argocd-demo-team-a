@@ -21,7 +21,7 @@ spec:
           # Control the service name that will be created
           fullnameOverride: rollout-example
           image:
-            tag: "0.1" # We will use this to trigger a rollout
+            tag: "0.2" # We will use this to trigger a rollout
 
           # The ingress values do nothing here
 
