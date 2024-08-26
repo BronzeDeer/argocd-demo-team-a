@@ -9,19 +9,33 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default # Should be patched by parent app as needed
-  source:
-    repoURL: https://github.com/BronzeDeer/argocd-demo-team-a.git # We are loading a helm chart via git
-    targetRevision: HEAD
-    path: ./apps/rollout-example/vendor/blue-green
+  # Use multi source to include ingresses, since the original chart omits it for some reason
+  sources:
+    # Example app chart
+    - repoURL: https://github.com/BronzeDeer/argocd-demo-team-a.git # We are loading a helm chart via git
+      targetRevision: HEAD
+      path: ./apps/rollout-example/vendor/blue-green
 
-    helm:
-      valuesObject:
-        image:
-          tag: "0.1" # We will use this to trigger a rollout
+      helm:
+        valuesObject:
+          # Control the service name that will be created
+          fullnameOverride: rollout-example
+          image:
+            tag: "0.1" # We will use this to trigger a rollout
 
-        ingress:
-          enabled: true
-          # Parent app should pass relevant ingress values
+          # The ingress values do nothing here
+
+    - repoURL: https://github.com/BronzeDeer/argocd-demo-team-a.git # We are loading a helm chart via git
+      targetRevision: HEAD
+      path: ./apps/rollout-example/ingress-chart
+
+      helm:
+        valuesObject:
+          ingress:
+            # Reference the service name that we forced above
+            serviceNameOverride: rollout-example
+            enabled: true
+            # Parent app should pass relevant ingress values
 
 
   destination:

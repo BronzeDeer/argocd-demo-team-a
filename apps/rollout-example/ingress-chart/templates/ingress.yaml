@@ -1,0 +1,67 @@
+{{ $svcBase:= default (include "helm-guestbook.fullname" . ) .Values.ingress.serviceNameOverride -}}
+{{ if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+{{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+  name: rollout-example
+spec:
+  {{- with .Values.ingress.className }}
+  ingressClassName: {{.}}
+  {{- end}}
+  rules:
+    - host: {{ first .Values.ingress.hosts }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{$svcBase}}
+                port:
+                  number: 80
+            path: {{ .Values.ingress.path }}
+            pathType: ImplementationSpecific
+{{- with .Values.ingress.tls }}
+  tls:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+---
+{{ if .Values.ingress.preview.enabled -}}
+{{- $hostComponents :=  first .Values.ingress.hosts | splitList "." -}}
+{{- $previewHost := (print (first $hostComponents) "-preview") | prepend (rest $hostComponents) | join "." }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+{{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+{{- end }}
+  name: rollout-example-preview
+spec:
+  {{- with .Values.ingress.className }}
+  ingressClassName: {{.}}
+  {{- end}}
+  rules:
+    - host: {{ $previewHost }}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{ $svcBase }}-preview
+                port:
+                  number: 80
+            path: {{ .Values.ingress.path }}
+            pathType: ImplementationSpecific
+{{ with .Values.ingress.tls }}
+  tls:
+{{- range $i, $val := . }}
+    - secretName: {{ $val.secretName }}-preview
+      hosts:
+        - {{ $previewHost }}
+{{- end }}
+{{- end }}
+---
+{{- end }}
+{{- end }}

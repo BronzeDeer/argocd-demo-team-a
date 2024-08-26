@@ -1,0 +1,4 @@
+apiVersion: v2
+name: rollout-example-ingress
+version: v0.0.1
+description: A tiny helper chart that is necessary since the rollout example forgot to include ingresses

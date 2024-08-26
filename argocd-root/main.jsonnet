@@ -57,30 +57,29 @@ function(_argoCD=defaults._argoCD,_clusterInfo=defaults._clusterInfo) [
     sourceType="helm"
   )
   + utils.withPatchDestination()
-  + utils.withPatchedSource()
+  # Multi-source app, both sources are in this repo, so need to be patched
+  + utils.withPatchedSource(0)
+  + utils.withPatchedSource(1)
   + utils.withPatchedProject()
   + utils.withPatchedNamespace()
-  + utils.withRenderedSource()
-  + {
+  + utils.withSourcePatchByIdx({
     # Due to the simplicity, this app adds no second layer of indirection, so we template out the full domain here
     local domain = "rollout." + std.lstripChars(_clusterInfo.baseDomain,'.'),
     // Fixme: Make Helper Method for this or use https://github.com/jsonnet-libs/argo-cd-libsonnet
-    spec+: {
-      source+: {
-        helm+: {
-          //Pass and transform relevant configuration from cluster
-          valuesObject+: {
-            ingress+: {
-              annotations+: _clusterInfo.ingressAnnotations,
-              hosts+: [domain],
-              tls+: [{
-                secretName: "rollout-cluster-base-tls",
-                hosts: [domain]
-              }],
-            },
-          },
+    helm+: {
+      //Pass and transform relevant configuration from cluster
+      valuesObject+: {
+        ingress+: {
+          annotations+: _clusterInfo.ingressAnnotations,
+          hosts+: [domain],
+          className: _clusterInfo.ingressClass,
+          tls+: [{
+            secretName: "rollout-cluster-base-tls",
+            hosts: [domain]
+          }],
         },
       },
     },
-  },
+  },1)
+  ,
 ]
