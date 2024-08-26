@@ -30,6 +30,7 @@ function(_argoCD=defaults._argoCD,_clusterInfo=defaults._clusterInfo) [
     sourceType="helm"
   )
   + utils.withPatchedLocalApp()
+  + utils.withRenderedSource()
   + {
     // Fixme: Make Helper Method for this or use https://github.com/jsonnet-libs/argo-cd-libsonnet
     spec+: {
@@ -59,6 +60,7 @@ function(_argoCD=defaults._argoCD,_clusterInfo=defaults._clusterInfo) [
   + utils.withPatchedSource()
   + utils.withPatchedProject()
   + utils.withPatchedNamespace()
+  + utils.withRenderedSource()
   + {
     # Due to the simplicity, this app adds no second layer of indirection, so we template out the full domain here
     local domain = "rollout." + std.lstripChars(_clusterInfo.baseDomain,'.'),
