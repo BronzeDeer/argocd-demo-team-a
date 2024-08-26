@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default # Should be patched by parent app as needed
   source:
-    repoURL: https://github.com/argoproj/argocd-example-apps.git # We are loading a helm chart via git
+    repoURL: https://github.com/BronzeDeer/argocd-demo-team-a.git # We are loading a helm chart via git
     targetRevision: HEAD
-    path: ./blue-green
+    path: ./apps/rollout-example/vendor/blue-green
 
     helm:
       valuesObject:

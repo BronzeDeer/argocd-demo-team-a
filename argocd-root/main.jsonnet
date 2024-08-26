@@ -56,6 +56,7 @@ function(_argoCD=defaults._argoCD,_clusterInfo=defaults._clusterInfo) [
     sourceType="helm"
   )
   + utils.withPatchDestination()
+  + utils.withPatchedSource()
   + utils.withPatchedProject()
   + utils.withPatchedNamespace()
   + {

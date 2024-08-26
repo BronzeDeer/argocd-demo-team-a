@@ -1,0 +1,10 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - configDigest: 75f73ce1568292e8506799cb5919dd8d4cb4b91bf293e61acbad5684759cb072
+    git:
+      commitTitle: Template variable for container port (#251)...
+      sha: d7927a27b4533926b7d86b5f249cd9ebe7625e90
+    path: vendor
+  path: apps/rollout-example
+kind: LockConfig

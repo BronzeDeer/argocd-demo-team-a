@@ -21,3 +21,6 @@ A simple deployment of `traefik/whoami` which echos back all headers of any http
 ### Rollout Example
 
 A deployment of the ["blue-green" argocd example app](https://github.com/argoproj/argocd-example-apps/tree/master/blue-green) which demonstrates a blue green deployment via Argo Rollouts.
+
+It also serves as demonstration of using [`vendir`](https://github.com/carvel-dev/vendir) to fully vendor (and therefore pin) even chart dependencies. This can be used together with setting only a single git repo as valid source in the ArgoCD `AppProject`to force pure GitOps for compliance/security/maintanability
+`
